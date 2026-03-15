@@ -22,7 +22,6 @@ if u face bugs and waana modify it and make it your own pls do and share with me
  1) Raylib library
  2) compiler for c
  3) a fonts dir or you can just tweak it a bit to match your preference
-
- 5) 
+### Beware of Bugs
 
 
