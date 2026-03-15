@@ -5,18 +5,15 @@
 #include <string.h>
 #include <math.h> // for sin() in pulsing colors
 
-// ----------------------------
-// Custom types for clarity
-// ----------------------------
+
+// Custom types
 typedef char i8;
 typedef unsigned char u8;
 typedef int i32;
 typedef float f32;
 typedef unsigned char b8;
 
-// ----------------------------
 // Constants
-// ----------------------------
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 800
 #define PADDLE_WIDTH 20
@@ -26,14 +23,13 @@ typedef unsigned char b8;
 #define NAME_LEN 32
 #define MAX_LEVELS 5
 
-// ----------------------------
 // Game states
-// ----------------------------
+
 typedef enum GameState { MENU, NAME_INPUT, LEVEL_SELECT, PLAYING, PAUSED, GAME_OVER } GameState;
 
-// ----------------------------
+
 // Structures
-// ----------------------------
+
 typedef struct Paddle { f32 x, y; int upKey, downKey; } Paddle;
 typedef struct Ball { f32 x, y, speedX, speedY; } Ball;
 typedef struct Level { i32 targetScore; f32 ballSpeed; } Level;
@@ -50,9 +46,8 @@ typedef struct Game {
     char player2Name[NAME_LEN];
 } Game;
 
-// ----------------------------
+
 // Level settings
-// ----------------------------
 Level levels[MAX_LEVELS] = {
     {3, 5.0f}, {5, 6.0f}, {7, 7.0f}, {9, 8.0f}, {11, 9.0f}
 };
@@ -63,9 +58,8 @@ Color levelBall[MAX_LEVELS]   = { WHITE, YELLOW, ORANGE, RED, SKYBLUE };
 Color levelPaddle[MAX_LEVELS] = { WHITE, GREEN, BLUE, PURPLE, ORANGE };
 Color levelText[MAX_LEVELS]   = { WHITE, YELLOW, ORANGE, RED, SKYBLUE };
 
-// ----------------------------
+
 // Function prototypes
-// ----------------------------
 void InitGame(Game *g, i32 mode);
 void MovePaddle(Paddle *p);
 void AIPaddle(Paddle *p, Ball b, f32 aiSpeed);
@@ -78,16 +72,15 @@ void DrawGameOver(Game *g, Font font);
 void DrawPause(Game g, Font font);
 void DrawLevelSelect(Game *g, Font font);
 
-// ----------------------------
+
 // Pulse color helper
-// ----------------------------
 u8 pulseColor(f32 t, u8 base){
     return (u8)(base + 50 * sin(t*5));
 }
 
-// ----------------------------
+
 // Initialize game
-// ----------------------------
+
 void InitGame(Game *g, i32 mode){
     g->player1.x = 0; 
     g->player1.y = SCREEN_HEIGHT/2 - PADDLE_HEIGHT/2;
@@ -114,34 +107,32 @@ void InitGame(Game *g, i32 mode){
     strcpy(g->player2Name,"");
 }
 
-// ----------------------------
+
 // Move player paddle with assigned keys
-// ----------------------------
 void MovePaddle(Paddle *p){
     if(IsKeyDown(p->upKey) && p->y > 0) p->y -= PADDLE_SPEED;
     if(IsKeyDown(p->downKey) && p->y < SCREEN_HEIGHT - PADDLE_HEIGHT) p->y += PADDLE_SPEED;
 }
 
-// ----------------------------
+
 // Simple AI movement
-// ----------------------------
+
 void AIPaddle(Paddle *p, Ball b, f32 aiSpeed){
     f32 center = p->y + PADDLE_HEIGHT/2;
     if(center < b.y + BALL_SIZE/2 - 15 && p->y < SCREEN_HEIGHT-PADDLE_HEIGHT) p->y += aiSpeed * ((rand()%2)?1:0.7f); // slight imperfection
     if(center > b.y + BALL_SIZE/2 + 15 && p->y > 0) p->y -= aiSpeed * ((rand()%2)?1:0.7f);
 }
 
-// ----------------------------
+
 // Check ball/paddle collision
-// ----------------------------
+
 b8 CheckPaddleCollision(Ball *b,Paddle p){
     return (b->x < p.x+PADDLE_WIDTH && b->x+BALL_SIZE > p.x &&
             b->y+BALL_SIZE > p.y && b->y < p.y+PADDLE_HEIGHT);
 }
 
-// ----------------------------
+
 // Reset ball to center
-// ----------------------------
 void ResetBall(Ball *b,f32 speed){
     b->x = SCREEN_WIDTH/2 - BALL_SIZE/2;
     b->y = SCREEN_HEIGHT/2 - BALL_SIZE/2;
@@ -149,9 +140,8 @@ void ResetBall(Ball *b,f32 speed){
     b->speedY = speed * ((rand()%2)?1:-1);
 }
 
-// ----------------------------
+
 // Input player name
-// ----------------------------
 void InputName(char *name,i32 maxLen,const char *prompt,Font font){
     i32 len = strlen(name);
     b8 finished = 0;
@@ -174,9 +164,8 @@ void InputName(char *name,i32 maxLen,const char *prompt,Font font){
     }
 }
 
-// ----------------------------
+
 // Draw level select menu
-// ----------------------------
 void DrawLevelSelect(Game *g, Font font){
     BeginDrawing();
     ClearBackground(BLACK);
@@ -193,9 +182,8 @@ void DrawLevelSelect(Game *g, Font font){
     }
 }
 
-// ----------------------------
+
 // Draw pause screen
-// ----------------------------
 void DrawPause(Game g, Font font){
     BeginDrawing();
     ClearBackground(BLACK);
@@ -205,9 +193,8 @@ void DrawPause(Game g, Font font){
     EndDrawing();
 }
 
-// ----------------------------
+
 // Draw playing field
-// ----------------------------
 void DrawGame(Game g, Font font){
     f32 t = GetTime();
 
@@ -239,9 +226,8 @@ void DrawGame(Game g, Font font){
     EndDrawing();
 }
 
-// ----------------------------
+
 // Update game logic
-// ----------------------------
 void UpdateGame(Game *g){
     if(g->state!=PLAYING) return;
 
@@ -266,9 +252,8 @@ void UpdateGame(Game *g){
     if(IsKeyPressed(KEY_P)) g->state = PAUSED;
 }
 
-// ----------------------------
+
 // Draw game over menu
-// ----------------------------
 void DrawGameOver(Game *g, Font font){
     BeginDrawing();
     ClearBackground(BLACK);
@@ -280,9 +265,8 @@ void DrawGameOver(Game *g, Font font){
     if(IsKeyPressed(KEY_TWO)){ g->state = MENU; }
 }
 
-// ----------------------------
+
 // Main
-// ----------------------------
 int main(){
     srand(time(NULL));
     InitWindow(SCREEN_WIDTH,SCREEN_HEIGHT,"Pong Bros");
