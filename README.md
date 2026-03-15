@@ -13,7 +13,7 @@ the menu has a options for:
 1) player vs AI
 2) player vs player
 3) creative mode
-When  you enter or select player or which ever mode, you will be able to select level
+When  you enter or select player or which ever mode, you will be able to select level.
 Each level is different from the previous and and progressing gets harder as levels progress
  Honestly this was a project i did to get and try to understand c and Raylib so bear in mind it might have few bugs
 if u face bugs and waana modify it and make it your own pls do and share with me that would be helpful!!
